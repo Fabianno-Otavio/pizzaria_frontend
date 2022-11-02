@@ -8,6 +8,7 @@ import logoImg from '../../public/logo.svg';
 
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
+import { toast } from 'react-toastify';
 
 import { AuthContext } from '../contexts/AuthContext';
 
@@ -25,12 +26,21 @@ export default function Home() {
   async function handleLogin(event: FormEvent){
       event.preventDefault();
 
+      if(email === '' || password === ''){
+        toast.warning('Preencha todos os dados!');
+        return;
+      }
+
+      setLoading(true);
+
       let data = {
           email,
           password
       }
 
       await signIn(data);
+
+      setLoading(false);
   }
 
   return (
@@ -58,7 +68,7 @@ export default function Home() {
 
             <Button
               type='submit'
-              loading={false}
+              loading={loading}
             >
               Acessar
             </Button>
