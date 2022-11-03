@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import { AuthContext } from '../../contexts/AuthContext';
 
 import Link from 'next/link';
+import { canSSRGuest } from '../../utils/canSSRGuest';
 
 export default function SignUp() {
 
@@ -89,3 +90,9 @@ export default function SignUp() {
         </>
     )
 }
+
+export const getServerSideProps = canSSRGuest(async (ctx) => {
+    return {
+      props: {}
+    }
+  })
