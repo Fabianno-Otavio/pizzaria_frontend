@@ -1,4 +1,4 @@
-import { FormEvent, useContext, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styles from '../../../styles/home.module.scss';
@@ -9,14 +9,13 @@ import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 import { toast } from 'react-toastify';
 
-import { AuthContext } from '../../contexts/AuthContext';
-
 import Link from 'next/link';
 import { canSSRGuest } from '../../utils/canSSRGuest';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function SignUp() {
 
-    const { signUp } = useContext(AuthContext);
+    const { signUp } = useAuth();
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
