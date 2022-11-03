@@ -4,6 +4,9 @@ import { Header } from "../../components/Header";
 import styles from './styles.module.scss';
 import { setupAPIClient } from '../../services/api';
 import { toast } from "react-toastify";
+import { canSSRAuth } from '../../utils/canSSRAuth';
+import { Input } from "../../components/ui/Input";
+import { Button } from "../../components/ui/Button";
 
 export default function Category() {
 
@@ -35,18 +38,22 @@ export default function Category() {
                 <h1>Cadastrar categorias</h1>
 
                 <form className={styles.form} onSubmit={handleRegister}>
-                    <input
-                    type='text'
+                    <Input
                     placeholder='Digite o nome da categoria'
-                    className={styles.input}
                     value={name}
                     onChange={(e)=> setName(e.target.value)}
                     />
 
-                    <button type='submit' className={styles.buttonAdd}>Cadastrar</button>
+                    <Button type='submit'>Cadastrar</Button>
                 </form>
             </main>
         </div>
         </>
     )
 }
+
+export const getServerSideProps = canSSRAuth(async (ctx) => {
+    return{
+        props:{}
+    }
+})
