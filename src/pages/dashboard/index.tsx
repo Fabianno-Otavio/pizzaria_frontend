@@ -36,6 +36,7 @@ export type OrderItemProps = {
 
 export default function Dashboard({ orders }: HomeProps){
 
+    const apiClient = setupAPIClient();
     const [orderList, setOrderList] = useState(orders || []);
 
     const [modalItem, setModalItem] = useState<OrderItemProps[]>({} as OrderItemProps[]);
@@ -46,7 +47,6 @@ export default function Dashboard({ orders }: HomeProps){
     }
 
     async function handleOpenModalView(order_id: string){
-        const apiClient = setupAPIClient();
         const response = await apiClient.get('/orders/detail', {
             params: {
                 order_id: order_id
@@ -58,15 +58,18 @@ export default function Dashboard({ orders }: HomeProps){
     }
 
     async function handleFinishItem(order_id: string){
-        const apiClient = setupAPIClient();
         await apiClient.put('/order/finish', {
             order_id: order_id
         });
 
+        handleRefreshOrders();
+        setModalVisible(false);
+    }
+
+    async function handleRefreshOrders(){
         const response = await apiClient.get('/orders');
         setOrderList(response.data);
-
-        setModalVisible(false);
+        
     }
 
     Modal.setAppElement('#__next');
@@ -82,7 +85,7 @@ export default function Dashboard({ orders }: HomeProps){
 
                 <div className={styles.containerHeader}>
                     <h1>Últimos pedidos</h1>
-                    <button>
+                    <button onClick={handleRefreshOrders} >
                         <FiRefreshCcw color='#3fffa3'/>
                     </button>
                 </div>
