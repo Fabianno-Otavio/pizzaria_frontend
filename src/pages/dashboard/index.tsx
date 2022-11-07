@@ -5,6 +5,8 @@ import { Header } from '../../components/Header';
 import styles from './styles.module.scss';
 import { FiRefreshCcw } from 'react-icons/fi';
 import { setupAPIClient } from '../../services/api';
+import { ModalOrder } from '../../components/ModalOrder';
+import Modal from 'react-modal';
 
 type OrderProps = {
     id: string;
@@ -17,13 +19,57 @@ interface HomeProps{
     orders: OrderProps[];
 }
 
+export type OrderItemProps = {
+    id: string;
+    amount: number;
+    order_id: string;
+    product_id: string;
+    product: {
+        id: string;
+        name: string;
+        description: string;
+        price: string;
+        banner: string;
+    }
+    order: OrderProps;
+}
+
 export default function Dashboard({ orders }: HomeProps){
 
     const [orderList, setOrderList] = useState(orders || []);
 
-    function handleOpenModalView(order_id: string){
-        alert('teste' + order_id)
+    const [modalItem, setModalItem] = useState<OrderItemProps[]>({} as OrderItemProps[]);
+    const [modalVisible, setModalVisible] = useState(false);
+
+    function handleCloseModal(){
+        setModalVisible(false);
     }
+
+    async function handleOpenModalView(order_id: string){
+        const apiClient = setupAPIClient();
+        const response = await apiClient.get('/orders/detail', {
+            params: {
+                order_id: order_id
+            }
+        });
+        setModalItem(response.data);
+        
+        setModalVisible(true);
+    }
+
+    async function handleFinishItem(order_id: string){
+        const apiClient = setupAPIClient();
+        await apiClient.put('/order/finish', {
+            order_id: order_id
+        });
+
+        const response = await apiClient.get('/orders');
+        setOrderList(response.data);
+
+        setModalVisible(false);
+    }
+
+    Modal.setAppElement('#__next');
 
     return(
         <>
@@ -43,6 +89,12 @@ export default function Dashboard({ orders }: HomeProps){
 
                 <article className={styles.listOrders}>
 
+                    {orderList.length === 0 && (
+                        <span className={styles.emptyList}>
+                            Nenhum pedido aberto foi encontrado.
+                        </span>
+                    )}
+
                     {orderList.map(item => {
                         return(
                             <section key={item.id} className={styles.orderItem}>
@@ -57,6 +109,16 @@ export default function Dashboard({ orders }: HomeProps){
                 </article>
 
             </main>
+
+            { modalVisible && (
+                <ModalOrder
+                isOpen={modalVisible}
+                onRequestClose={handleCloseModal}
+                order={modalItem}
+                handleFinishOrder={handleFinishItem}
+                />
+            )}
+            
         </div>
         </>
     )
