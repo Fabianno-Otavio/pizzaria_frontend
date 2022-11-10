@@ -29,7 +29,14 @@ This project is a pizza restaurant system that was made by following the course 
 
 # Getting Started
 
-First, run the development server:
+First, install the dependencies:
+
+```bash
+npm intall
+# or
+yarn install
+```
+Then, run the development server:
 
 ```bash
 npm run dev
