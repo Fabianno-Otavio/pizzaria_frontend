@@ -2,6 +2,7 @@ import styles from './styles.module.scss';
 import Link from 'next/link';
 import { FiLogOut } from 'react-icons/fi';
 import { useAuth } from '../../contexts/AuthContext';
+import Image from 'next/image';
 
 export function Header(){
 
@@ -10,7 +11,7 @@ export function Header(){
         <header className={styles.headerContainer}>
             <div className={styles.headerContent}>
                 <Link href='/dashboard'>
-                    <img src='/logo.svg' width={190} height={60}></img>
+                    <Image src='/logo.svg' width={190} height={60} alt='Logo'></Image>
                 </Link>
                 <nav className={styles.menuNav}>
                     <Link href='/category'>Categoria</Link>

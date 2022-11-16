@@ -9,6 +9,7 @@ import { FiUpload } from 'react-icons/fi'
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { setupAPIClient } from '../../services/api';
 import { toast } from 'react-toastify';
+import Image from 'next/image';
 
 type ItemProps = {
     id: string;
@@ -111,7 +112,7 @@ export default function Product({ categoryList }: CategoryProps){
                             <input type='file' accept='image/png, image/jpeg' onChange={handleFile}/>
 
                             {avatarUrl && (
-                                <img
+                                <Image
                                 className={styles.preview}
                                 src={avatarUrl}
                                 alt="Foto do produto"
