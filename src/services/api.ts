@@ -6,7 +6,7 @@ import { signOut } from '../contexts/AuthContext';
 export function setupAPIClient(ctx: any = undefined){
     let cookies = parseCookies(ctx);
     const api = axios.create({
-        baseURL: 'pizzariabackend-production.up.railway.app',
+        baseURL: 'https://pizzariabackend-production.up.railway.app/',
         headers: {
             Authorization: `Bearer ${cookies['@nextauth.token']}`
         }
